@@ -1,0 +1,27 @@
+# Виртуальное окружение — не коммитим, оно у каждого своё
+.venv/
+venv/
+
+# Кэш Python
+__pycache__/
+*.py[cod]
+
+# Скриншоты и отладочные картинки
+captures/
+*.png
+!docs/*.png
+
+# Кэш переводов и модели
+cache/
+models/
+*.json.cache
+
+# Локальные настройки
+config.local.json
+.env
+
+# Служебное
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
