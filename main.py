@@ -1,12 +1,14 @@
 """
-Этап 5: потоки и очереди.
+Этап 5–6: потоки, очередь и детект изменений.
 Медленную работу (захват + OCR) уносим в отдельный поток-работник,
 а окно живёт в главном потоке и больше не подвисает.
-Связь между потоками — очередь (безопасная "лента").
+Распознаём ТОЛЬКО когда кадр изменился (этап 6), а не без остановки.
 """
 
+import hashlib      # для "отпечатка" кадра — сравнить, изменился ли он
 import queue        # очередь — безопасная лента между потоками
 import threading    # потоки — независимые линии выполнения
+import time         # для пауз (sleep)
 import tkinter as tk
 
 import capture
@@ -17,12 +19,24 @@ from ocr import recognize_text
 text_queue = queue.Queue()
 
 
+def frame_hash():
+    """Короткий "отпечаток" текущего снимка. Одинаковые кадры → одинаковый отпечаток."""
+    with open("capture.png", "rb") as f:      # "rb" = читаем файл как байты
+        return hashlib.md5(f.read()).hexdigest()
+
+
 def worker():
-    """Поток-работник: по кругу снимает экран, распознаёт и кладёт текст на ленту."""
+    """Поток-работник: снимает по кругу, но распознаёт ТОЛЬКО когда кадр изменился."""
+    last_hash = None   # отпечаток последнего РАСПОЗНАННОГО кадра
     while True:
         capture.capture_screen()
-        text = recognize_text("capture.png")
-        text_queue.put(text)  # положить результат на ленту
+        current_hash = frame_hash()   # отпечаток нового кадра
+        if current_hash != last_hash:
+            text = recognize_text("capture.png")
+            text_queue.put(text)
+            last_hash = current_hash
+        time.sleep(0.2)   # маленькая пауза, чтобы не грузить процессор впустую
+
 
 
 def update_label():
@@ -41,7 +55,7 @@ window = tk.Tk()
 window.overrideredirect(True)
 window.attributes("-topmost", True)
 window.attributes("-alpha", 0.85)
-window.geometry("900x250+250+600")
+window.geometry("900x250+250+440")
 label = tk.Label(window, text="жду текст...", font=("Arial", 20),
                  fg="white", bg="black", wraplength=880, justify="left")
 label.pack()
