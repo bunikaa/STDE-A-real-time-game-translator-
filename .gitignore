@@ -1,0 +1,31 @@
+# Віртуальне оточення — не комітимо, воно в кожного своє
+.venv/
+venv/
+
+# Кеш Python
+__pycache__/
+*.py[cod]
+
+# Скріншоти й налагоджувальні зображення
+captures/
+*.png
+!docs/*.png
+
+# Кеш перекладів і моделі
+cache/
+models/
+*.json.cache
+
+# Локальні налаштування
+config.local.json
+.env
+
+# Особисті нотатки (лишаються локально)
+NOTES.md
+SCHEDULE.md
+
+# Службове
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
