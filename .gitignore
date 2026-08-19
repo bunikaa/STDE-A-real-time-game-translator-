@@ -15,6 +15,7 @@ captures/
 cache/
 models/
 *.json.cache
+cache.json
 
 # Локальні налаштування
 config.local.json
