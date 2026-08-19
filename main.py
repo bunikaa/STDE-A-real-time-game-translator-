@@ -11,6 +11,9 @@ import threading    # потоки — незалежні лінії викон�
 import time         # для пауз (sleep)
 import tkinter as tk
 
+# ВАЖЛИВО: translator (torch) імпортуємо ПЕРШИМ серед бібліотек — інакше
+# конфлікт системних DLL із winocr (в ocr) і аварійне падіння на Windows.
+from translator import translate
 import capture
 from ocr import recognize_text
 
@@ -33,6 +36,7 @@ def worker():
         current_hash = frame_hash()   # відбиток нового кадру
         if current_hash != last_hash:
             text = recognize_text("capture.png")
+            text = translate(text) 
             text_queue.put(text)
             last_hash = current_hash
         time.sleep(0.2)   # маленька пауза, щоб не вантажити процесор даремно
