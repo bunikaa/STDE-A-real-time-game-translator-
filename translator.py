@@ -21,6 +21,7 @@ except FileNotFoundError:
 
 def translate(text):
     """Перекладає англійський текст українською."""
+    text = text.lstrip(". ")
     if text in cache:
         result = cache[text]
     else:
