@@ -16,6 +16,11 @@ import tkinter as tk
 from translator import translate
 import capture
 from ocr import recognize_text
+from translator_nllb import translate_nllb
+from translator_class import Translator
+
+translator = Translator()
+
 
 # --- Стрічка між потоками ---
 # Працівник кладе сюди розпізнаний текст, вікно забирає.
@@ -35,8 +40,8 @@ def worker():
         capture.capture_screen()
         current_hash = frame_hash()   # відбиток нового кадру
         if current_hash != last_hash:
-            text = recognize_text("capture.png")
-            text = translate(text) 
+            text = recognize_text("capture.png") 
+            text = translator.translate(text)
             text_queue.put(text)
             last_hash = current_hash
         time.sleep(0.2)   # маленька пауза, щоб не вантажити процесор даремно

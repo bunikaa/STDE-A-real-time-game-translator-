@@ -4,7 +4,7 @@
 import time
 
 from translator import translate
-
+from translator_nllb import translate_nllb
 
 test_set = [
     ("We once tamed it in what became one of the strangest, "
@@ -19,6 +19,7 @@ test_set = [
 
 for english, reference in test_set:
     result = translate(english)
+    result_nllb = translate_nllb(english)
     print("вхідний текст: ", english,
-           "\nпереклад: ", result, "\nеталон: ", reference)
+           "\nпереклад: ", result,"переклад NLLB: ", result_nllb, "\nеталон: ", reference)
     
