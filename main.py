@@ -36,15 +36,24 @@ def frame_hash():
 def worker():
     """Потік-працівник: знімає по колу, але розпізнає ЛИШЕ коли кадр змінився."""
     last_hash = None   # відбиток останнього РОЗПІЗНАНОГО кадру
+    stable_count = 0      # лічильник стабільних кадрів (для дебагу)    
+    processed_hash = None # лічильник оброблених кадрів (для дебагу)
+
     while True:
         capture.capture_screen()
         current_hash = frame_hash()   # відбиток нового кадру
-        if current_hash != last_hash:
+        if current_hash == last_hash:
+            stable_count += 1
+        else:
+            last_hash = current_hash
+            stable_count = 0
+
+        if stable_count > 3 and   current_hash != processed_hash:
             text = recognize_text("capture.png") 
             text = translator.translate(text)
             text_queue.put(text)
-            last_hash = current_hash
-        time.sleep(0.2)   # маленька пауза, щоб не вантажити процесор даремно
+            processed_hash = current_hash
+        time.sleep(0.2)  # маленька пауза, щоб не вантажити процесор даремно
 
 
 
