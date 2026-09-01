@@ -1,1 +1,1 @@
-# STED: A real-time game translator
+# STDE: A real-time game translator
