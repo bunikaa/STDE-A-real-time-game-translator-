@@ -1,1 +1,1 @@
-# stde
+# STED- translator for game
