@@ -1,0 +1,5 @@
+mss==10.2.0
+easyocr==1.7.2
+transformers==5.15.0
+torch==2.13.0
+sentencepiece==0.2.2
