@@ -1,1 +1,1 @@
-# STED- translator for game
+# STED: A real-time game translator
